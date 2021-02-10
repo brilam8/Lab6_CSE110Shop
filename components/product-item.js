@@ -2,7 +2,12 @@
 
 
 class ProductItem extends HTMLElement {
-  constructor(imgSrc, title, price) {
+
+  static get observedAttributes() {
+    return [`src`, `title`, `data-price`, `id`];
+  }
+
+  constructor() {
     super();
     this.attachShadow({mode: 'open'});
 
@@ -72,7 +77,6 @@ class ProductItem extends HTMLElement {
       text-overflow: unset;
     }
     `
-    
     const container = document.createElement('ul')
     container.setAttribute('class', 'flex-container')
     container.setAttribute('id', 'product-list')
@@ -80,27 +84,82 @@ class ProductItem extends HTMLElement {
     const list = container.appendChild(document.createElement('li'))
     list.setAttribute('class', 'product')
 
-    const image = list.appendChild(document.createElement('img'))
+    const image = this.image = list.appendChild(document.createElement('img'))
     image.setAttribute('width', 200)
-    image.setAttribute('src', imgSrc)
-    image.setAttribute('alt', title)
+    image.src = this.hasAttribute('img') ? this.getAttribute('img') : "undefined.png";
+    image.alt = this.hasAttribute('title') ? this.getAttribute('title') : "undefined"
 
-    const p1 = list.appendChild(document.createElement('p'))
+    const p1 = this.p1T = list.appendChild(document.createElement('p'))
     p1.setAttribute('class', 'title')
-    p1.textContent = title
+    p1.textContent = this.hasAttribute('title') ? this.getAttribute('title') : "undefined"
 
-    const p2 = list.appendChild(document.createElement('p'))
+    const p2 = this.p2P = list.appendChild(document.createElement('p'))
     p2.setAttribute('class', 'price')
-    p2.textContent = price
+    p2.textContent = this.getAttribute('data-price')
 
-    const button = list.appendChild(document.createElement('button'))
-    button.setAttribute('onclick', "alert('Added to Cart!')")
+    const button = this.button = list.appendChild(document.createElement('button'))
+    button.onclick =  
+      function() {
+        if (!localStorage.getItem('cart-items')) {
+          localStorage.setItem('cart-items', JSON.stringify([]))
+        }
+        if (this.textContent == "Add to Cart") {
+          let cart = document.getElementById('cart-count')
+          alert('Added to Cart!'); 
+          cart.textContent = Number(cart.textContent) + 1;
+          this.textContent = "Remove from Cart";
+          let currItems = JSON.parse(localStorage.getItem('cart-items'))
+          currItems.push(this.getAttribute('id'))
+          localStorage.setItem('cart-items', JSON.stringify(currItems))
+        }
+        else {
+          let cart = document.getElementById('cart-count')
+          alert('Removed from Cart!'); 
+          cart.textContent = Number(cart.textContent) - 1;
+          this.textContent = "Add to Cart";
+          
+          let currItems = JSON.parse(localStorage.getItem('cart-items'))
+          let ind = currItems.indexOf(this.getAttribute('id'))
+          console.log(ind)
+          currItems.splice(ind, 1)
+          localStorage.setItem('cart-items', JSON.stringify(currItems))
+        }
+        
+      }
+    
     button.textContent = "Add to Cart"
+
+    button.addEventListener
 
     this.shadowRoot.append(style, container)
 
-    
-    
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    console.log(name)
+    if (name === `src`) {
+      this.image.setAttribute('src', newValue);
+    }
+    else if (name === `title`) {
+      this.image.setAttribute('alt', newValue);
+      this.p1T.textContent = newValue;
+    }
+    else if (name === `data-price`) {
+      this.p2P.textContent = `$${newValue}`
+    }
+    else if (name === `id`) {
+      let currItems = JSON.parse(localStorage.getItem('cart-items'))
+      let cart = document.getElementById('cart-count')
+      if (currItems && currItems.includes(newValue) == true) {
+        this.button.textContent = "Remove from Cart"
+        cart.textContent = Number(cart.textContent) + 1
+      }
+      else {
+        this.button.textContent = "Add to Cart"
+      }
+      this.button.setAttribute("id", newValue)
+    }
+    // ...
   }
 }
 

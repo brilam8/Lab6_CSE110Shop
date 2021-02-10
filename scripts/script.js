@@ -13,9 +13,16 @@ window.addEventListener('DOMContentLoaded', () => {
       else {
         console.log("already fetched the info and stored it")
       }
+      console.log(data[0])
+      for (let i = 0; i < data.length; i++ ) {
+        let prodEle = prodList.appendChild(document.createElement('product-item'))
+        //console.log(data[i].image)
+        
+        prodEle.title = data[i].title
+        prodEle.setAttribute('src', data[i].image)
+        prodEle.setAttribute("data-price", data[i].price)
+        prodEle.setAttribute("id", data[i].id)
+      }
     })
-  data = JSON.parse(localStorage.getItem('products'))
-  for (prod in data) {
-    prodList.appendChild(document.createElement('product-item'))
-  }
+  
 });
