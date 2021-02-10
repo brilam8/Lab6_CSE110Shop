@@ -4,7 +4,7 @@
 class ProductItem extends HTMLElement {
 
   static get observedAttributes() {
-    return [`src`, `title`, `data-price`, `id`];
+    return [`src`, `title`, `data-price`, `itemid`];
   }
 
   constructor() {
@@ -77,7 +77,7 @@ class ProductItem extends HTMLElement {
       text-overflow: unset;
     }
     `
-    const container = document.createElement('ul')
+    const container = this.cont = document.createElement('ul')
     container.setAttribute('class', 'flex-container')
     container.setAttribute('id', 'product-list')
 
@@ -105,24 +105,23 @@ class ProductItem extends HTMLElement {
         }
         if (this.textContent == "Add to Cart") {
           let cart = document.getElementById('cart-count')
-          alert('Added to Cart!'); 
           cart.textContent = Number(cart.textContent) + 1;
           this.textContent = "Remove from Cart";
           let currItems = JSON.parse(localStorage.getItem('cart-items'))
           currItems.push(this.getAttribute('id'))
           localStorage.setItem('cart-items', JSON.stringify(currItems))
+          alert('Added to Cart!'); 
         }
         else {
           let cart = document.getElementById('cart-count')
-          alert('Removed from Cart!'); 
           cart.textContent = Number(cart.textContent) - 1;
           this.textContent = "Add to Cart";
-          
           let currItems = JSON.parse(localStorage.getItem('cart-items'))
           let ind = currItems.indexOf(this.getAttribute('id'))
           console.log(ind)
           currItems.splice(ind, 1)
           localStorage.setItem('cart-items', JSON.stringify(currItems))
+          alert('Removed from Cart!'); 
         }
         
       }
@@ -135,6 +134,7 @@ class ProductItem extends HTMLElement {
 
   }
 
+  
   attributeChangedCallback(name, oldValue, newValue) {
     console.log(name)
     if (name === `src`) {
@@ -147,7 +147,7 @@ class ProductItem extends HTMLElement {
     else if (name === `data-price`) {
       this.p2P.textContent = `$${newValue}`
     }
-    else if (name === `id`) {
+    else if (name === `itemid`) {
       let currItems = JSON.parse(localStorage.getItem('cart-items'))
       let cart = document.getElementById('cart-count')
       if (currItems && currItems.includes(newValue) == true) {

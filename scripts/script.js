@@ -21,7 +21,7 @@ window.addEventListener('DOMContentLoaded', () => {
         prodEle.title = data[i].title
         prodEle.setAttribute('src', data[i].image)
         prodEle.setAttribute("data-price", data[i].price)
-        prodEle.setAttribute("id", data[i].id)
+        prodEle.setAttribute("itemid", data[i].id)
       }
     })
   
