@@ -77,6 +77,9 @@ class ProductItem extends HTMLElement {
       text-overflow: unset;
     }
     `
+
+    const main = this
+
     const container = this.cont = document.createElement('ul')
     container.setAttribute('class', 'flex-container')
     container.setAttribute('id', 'product-list')
@@ -104,11 +107,12 @@ class ProductItem extends HTMLElement {
           localStorage.setItem('cart-items', JSON.stringify([]))
         }
         if (this.textContent == "Add to Cart") {
+          console.log(main)
           let cart = document.getElementById('cart-count')
           cart.textContent = Number(cart.textContent) + 1;
           this.textContent = "Remove from Cart";
           let currItems = JSON.parse(localStorage.getItem('cart-items'))
-          currItems.push(this.getAttribute('id'))
+          currItems.push(main.getAttribute('itemid'))
           localStorage.setItem('cart-items', JSON.stringify(currItems))
           alert('Added to Cart!'); 
         }
@@ -117,7 +121,7 @@ class ProductItem extends HTMLElement {
           cart.textContent = Number(cart.textContent) - 1;
           this.textContent = "Add to Cart";
           let currItems = JSON.parse(localStorage.getItem('cart-items'))
-          let ind = currItems.indexOf(this.getAttribute('id'))
+          let ind = currItems.indexOf(main.getAttribute('itemid'))
           console.log(ind)
           currItems.splice(ind, 1)
           localStorage.setItem('cart-items', JSON.stringify(currItems))
@@ -125,6 +129,7 @@ class ProductItem extends HTMLElement {
         }
         
       }
+    
     
     button.textContent = "Add to Cart"
 
@@ -157,7 +162,7 @@ class ProductItem extends HTMLElement {
       else {
         this.button.textContent = "Add to Cart"
       }
-      this.button.setAttribute("id", newValue)
+      //this.button.setAttribute("id", newValue)
     }
     // ...
   }
