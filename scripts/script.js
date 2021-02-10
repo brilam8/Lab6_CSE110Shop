@@ -11,9 +11,9 @@ window.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('products', JSON.stringify(data))
       }
       else {
-        console.log("already fetched the info and stored it")
+        //console.log("already fetched the info and stored it")
       }
-      console.log(data[0])
+      //console.log(data[0])
       for (let i = 0; i < data.length; i++ ) {
         let prodEle = prodList.appendChild(document.createElement('product-item'))
         //console.log(data[i].image)

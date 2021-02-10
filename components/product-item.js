@@ -136,7 +136,7 @@ class ProductItem extends HTMLElement {
 
   
   attributeChangedCallback(name, oldValue, newValue) {
-    console.log(name)
+    //console.log(name)
     if (name === `src`) {
       this.image.setAttribute('src', newValue);
     }
