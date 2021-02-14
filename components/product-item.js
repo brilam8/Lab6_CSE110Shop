@@ -80,11 +80,7 @@ class ProductItem extends HTMLElement {
 
     const main = this
 
-    const container = this.cont = document.createElement('ul')
-    container.setAttribute('class', 'flex-container')
-    container.setAttribute('id', 'product-list')
-
-    const list = container.appendChild(document.createElement('li'))
+    const list = this.appendChild(document.createElement('li'))
     list.setAttribute('class', 'product')
 
     const image = this.image = list.appendChild(document.createElement('img'))
@@ -107,7 +103,6 @@ class ProductItem extends HTMLElement {
           localStorage.setItem('cart-items', JSON.stringify([]))
         }
         if (this.textContent == "Add to Cart") {
-          console.log(main)
           let cart = document.getElementById('cart-count')
           cart.textContent = Number(cart.textContent) + 1;
           this.textContent = "Remove from Cart";
@@ -135,7 +130,7 @@ class ProductItem extends HTMLElement {
 
     button.addEventListener
 
-    this.shadowRoot.append(style, container)
+    this.shadowRoot.append(style, list)
 
   }
 
